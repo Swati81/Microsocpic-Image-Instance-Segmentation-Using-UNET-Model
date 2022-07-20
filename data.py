@@ -9,8 +9,7 @@ import matplotlib.pyplot as plt
 
 patch_size = 256
 batch_size = 4
-# root_dir = 'nucleus_data'
-root_dir = 'satellite_data'
+root_dir = './nucleus_data'
 
 
 def find_labels():
@@ -53,29 +52,6 @@ def make_class_neucleus(mask):
     mask_g = mask[:, :, 1].copy()
     mask_g[mask_g == 128] = 1
 
-    return mask_g
-
-
-def make_class_landcover(mask):
-    """
-        for landcover data taking green channel only...
-        use this on patch_musk function...
-    """
-    return mask[:, :, 1].copy()
-
-
-def make_class_satellite(mask):
-    """
-        for satellite data taking green channel only...
-        use this on patch_musk function...
-    """
-    mask_g = mask[:, :, 1].copy()
-    mask_g[mask_g == 41] = 1    # land
-    mask_g[mask_g == 16] = 2    # building
-    mask_g[mask_g == 193] = 3   # road
-    mask_g[mask_g == 221] = 4   # vegetation
-    mask_g[mask_g == 169] = 5   # water
-    mask_g[mask_g == 155] = 0   # unlabeled
     return mask_g
 
 
@@ -123,7 +99,7 @@ def patch_mask(patch_size):
                         for j in range(patches_mask.shape[1]):
                             patch_mask = patches_mask[i, j, :, :]
                             patch_mask = patch_mask[0]  # Drop extra dimension
-                            patch_mask = make_class_satellite(patch_mask)
+                            patch_mask = make_class_neucleus(patch_mask)
                             cv2.imwrite('{}/patches/masks/{}.png'.format(root_dir, count), patch_mask)
                             count = count+1
 
